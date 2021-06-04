@@ -1,0 +1,30 @@
+@baseURL = http://localhost:8000/api
+@token = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiZXhwIjoxNjIzNDQyNTYxfQ.ZA35sYpBvRPISQxf98fWeGOrHHvqrlG9nyI5sOEoGt0
+
+
+POST {{baseURL}}/login
+Content-Type: application/json
+
+{
+    "email": "carlos@teste.com",
+    "password": "123456"
+}
+
+### Busca todos
+GET {{baseURL}}/projects
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### Busca todos
+GET {{baseURL}}/projects/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### Busca por categoria
+GET {{baseURL}}/projects/category/2
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### Busca por categoria
+PUT {{baseURL}}/projects/videos/1/0
+Authorization: Bearer {{token}}
