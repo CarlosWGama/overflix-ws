@@ -20,7 +20,10 @@ class LoginController extends Controller {
                 'exp'   => time() + (60*60*24*7) //Válido por uma semana
             ];
             $jwt = JWT::encode($datas, config('jwt.key'));
-            return response()->json(['jwt' => $jwt], 200);
+            $user = $user->toArray();
+            unset($user['password']);
+
+            return response()->json(['jwt' => $jwt, 'user' => $user], 200);
         }
         return response()->json('User not found', 404);
     }
