@@ -1,11 +1,21 @@
 @baseURL = http://localhost:8000/api
-@token = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiZXhwIjoxNjIzNDQyNTYxfQ.ZA35sYpBvRPISQxf98fWeGOrHHvqrlG9nyI5sOEoGt0
+@token = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiZXhwIjoxNjIzOTUwNDkxfQ.R6lJ7LcO8OT46z1o4_o4ik7eLguX0RByfTrPbZtKF68
 
-
+### Logar Usuário
 POST {{baseURL}}/login
 Content-Type: application/json
 
 {
+    "email": "carlos@teste.com",
+    "password": "123456"
+}
+
+### Cadastrar usuário
+POST {{baseURL}}/user
+Content-Type: application/json
+
+{
+    "name": "Carlos",
     "email": "carlos@teste.com",
     "password": "123456"
 }
@@ -27,4 +37,17 @@ Authorization: Bearer {{token}}
 
 ### Busca por categoria
 PUT {{baseURL}}/projects/videos/1/0
+Authorization: Bearer {{token}}
+
+
+### Busca os Favoritos
+GET {{baseURL}}/projects/favorites
+Authorization: Bearer {{token}}
+
+### Cadastra um vídeo nos favoritos
+POST {{baseURL}}/projects/favorites/1
+Authorization: Bearer {{token}}
+
+### Deleta um vídeo dos favoritos
+DELETE {{baseURL}}/projects/favorites/1
 Authorization: Bearer {{token}}

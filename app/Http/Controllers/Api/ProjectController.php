@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Favorite;
 use App\Models\Project;
 use App\Models\VideoWatch;
 use Illuminate\Http\Request;
@@ -28,12 +29,18 @@ class ProjectController extends Controller
        
         foreach ($projects as $k => $p) {
             $totalWatched = 0;
+
+            //Total assistidos
             foreach ($p['videos'] as $k2 => $v) {
                 $total = VideoWatch::where('user_id', $userID)->where('video_id', $v['id'])->count();
                 $projects[$k]['videos'][$k2]['watched'] = ($total == 1);
                 if ($total) $totalWatched++;
             }
             $projects[$k]['watched'] = $totalWatched;
+        
+        
+            //Favorito
+            $projects[$k]['favorite'] = boolval(Favorite::where('user_id', $userID)->where('project_id', $p['id'])->count());
         }
 
         return response()->json($projects, 200);
@@ -53,6 +60,7 @@ class ProjectController extends Controller
             if ($total) $totalWatched++;
         }
         $project['watched'] = $totalWatched;
+        $project['favorite'] = boolval(Favorite::where('user_id', $userID)->where('project_id', $project['id'])->count());
 
         return response()->json($project, 200);
     }
@@ -75,7 +83,52 @@ class ProjectController extends Controller
         } catch(\Exception $e) {
             return response()->json('Não foi possível completar a ação', 500);
         }
+    }
 
+    /**
+     * Retorna todos favoritos do usuário
+     */
+    public function getFavorites(Request $request) {
+        $userID = $this->userID($request);
+
+        $favorites = Favorite::where('user_id', $userID)->get();
+        $projects = [];
+
+        foreach ($favorites as $f) {
+            //Projects
+            $project = Project::find($f->project_id)->toArray();
+        
+            $totalWatched = 0;
+            foreach ($project['videos'] as $k2 => $v) {
+                $total = VideoWatch::where('user_id', $userID)->where('video_id', $v['id'])->count();
+                $project['videos'][$k2]['watched'] = ($total == 1);
+                if ($total) $totalWatched++;
+            }
+            $project['watched'] = $totalWatched;
+            $project['favorite'] = true;   
+
+            $projects[] = $project; 
+        }
+
+        return response()->json($projects, 200);
+    }
+
+    /** Salva aos favoritos **/
+    public function saveFavorite(Request $request, int $projectID) {
+        $userID = $this->userID($request);
+        Favorite::updateOrCreate([
+            'user_id'       => $userID,
+            'project_id'    => $projectID
+        ]);
+
+        return response()->json('Adicionado', 200);
+    }
+
+    /** Remove aos favoritos **/
+    public function removeFavorite(Request $request, int $projectID) {
+        $userID = $this->userID($request);
+        Favorite::where('project_id', $projectID)->where('user_id', $userID)->delete();
+        return response()->json('Removido', 200);
 
     }
 }
