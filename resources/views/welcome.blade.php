@@ -32,6 +32,9 @@
     <body class="container">
         <h1>OverFlix - API</h1>
 
+        <h2>Vídeo de Teste</h2>
+        <p>{{asset('videos/flexbox.mp4')}}</p>
+
         <h2>Rotas</h2>
         {{-- LOGIN --}}
         <h5>Login</h5>
@@ -57,7 +60,7 @@
         
         <p class="info">Exemplo Retorno</p>
         <code>{
-            "jwt": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiZXhwIjoxNjIzNDQ2MjQwfQ.ueuFZQiuo4uvHe0Ikw-m7B1NAr8QN73dygkeWym_-Qg"
+            "jwt": "string", "user": {"name": "string", "email": "string", "avatar": "string"}
           }</code>
 
         <hr/>
