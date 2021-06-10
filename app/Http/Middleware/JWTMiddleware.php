@@ -19,10 +19,11 @@ class JWTMiddleware
 
         try {
             $token = $request->bearerToken();
+            if (!$token) return response()->json('Token necessário', 403);
+            
             $datas = JWT::decode($token, config('jwt.key'), ['HS256']);
             if ($datas->exp > time())
                 return $next($request);
-            return response()->json('Token expirado', 403);
         } catch(\Exception $e) {
             print_r($e->getMessage());die;
             return response()->json('Acesso negado', 403);
